@@ -19,3 +19,4 @@ Imports:
     lubridate (>= 1.7.4),
     forecast (>= 8.7),
     prophet (>= 0.5)
+RoxygenNote: 6.1.1
