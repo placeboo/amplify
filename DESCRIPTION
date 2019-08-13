@@ -1,11 +1,21 @@
 Package: amplify
 Type: Package
-Title: What the Package Does (Title Case)
+Title: Forecasting Daily Time Seriers with Double Seasonal Patterns
 Version: 0.1.0
-Author: Who wrote it
-Maintainer: The package maintainer <yourself@somewhere.net>
-Description: More about what it does (maybe more than one line)
-    Use four spaces when indenting paragraphs within the Description.
-License: What license is it under?
+Authors@R: person("Jiaqi (Jackie)", "Yin", email = "jiaqiyin1014@gmail.com",
+  role = c("aut", "cre"))
+Description: Forecasting daily time seriers with 
+    multiplicative double seasonalities, within-week 
+    seasonal cycle and within-year seasonal cycle in R. 
+    The model is adjusted for holiday effect. It is also
+    robust to outliers.
+    The package is developed during my intern in
+    Amplify AI and Business Team, Microsoft. 
+License: GPL-3
 Encoding: UTF-8
 LazyData: true
+Imports: 
+    tidyverse (>= 1.2.1),
+    lubridate (>= 1.7.4),
+    forecast (>= 8.7),
+    prophet (>= 0.5)
