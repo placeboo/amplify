@@ -5,12 +5,12 @@
 #' @return A data frame with one column called date, and the date column displays a continouse sequence of dates from the starting date to the ending date.
 #' @examples
 #' build_date(20190101, 20190301)
-
+#' @export
 
 build_date = function(start.date,
                       end.date) {
-    start.date = ymd(start.date)
-    end.date = ymd(end.date)
+    start.date = lubridate::ymd(start.date)
+    end.date = lubridate::ymd(end.date)
 
     if (start.date > end.date) {
         stop("starting date should be early than ending date!")

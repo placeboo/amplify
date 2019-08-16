@@ -9,6 +9,7 @@
 #' idx = c(1, 5, 10, 21, 30)
 #' x[idx] = x[idx] + 5
 #' find_outlier(x, lambda = 1.5)
+#' @export
 
 
 find_outlier = function (x,
