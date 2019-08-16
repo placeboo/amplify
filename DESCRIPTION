@@ -15,8 +15,12 @@ License: GPL-3
 Encoding: UTF-8
 LazyData: true
 Imports: 
-    tidyverse (>= 1.2.1),
-    lubridate (>= 1.7.4),
-    forecast (>= 8.7),
-    prophet (>= 0.5)
+    tidyr,
+    dplyr,
+    ggplot2,  
+    lubridate,
+    forecast,
+    prophet
 RoxygenNote: 6.1.1
+Suggests: 
+    testthat
