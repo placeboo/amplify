@@ -9,7 +9,7 @@ find_outlier(x, lambda = 1.5)
 \arguments{
 \item{x}{A numeric vector.}
 
-\item{lambda=1.5, }{A number decribes the "distance" from the group \code{x}.}
+\item{lambda=1.5, }{A number decribes the "distance" from the group \code{x}. The larger the lambda is, the number of outliers captured is less.}
 }
 \value{
 A list contains a character vector names \code{is_outlier} that indicates whether it is outier ("yes", "no"), and a numeric vector named "bounds" that stores the upper cutting line and lower cutting line.
