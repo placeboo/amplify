@@ -12,7 +12,7 @@ measure_dist(est, truth)
 \item{truth}{A numeric vector of actual time series}
 }
 \value{
-A vector stores mean error (me), root mean square error (rmse), mean percentage error (pe), and mean absolute percentage error (mape)
+A matrix with mean error (me), root mean square error (rmse), mean percentage error (pe), and mean absolute percentage error (mape)
 }
 \description{
 Measure the distance between estimated time series and actual time series
