@@ -20,7 +20,9 @@ Imports:
     ggplot2,  
     lubridate,
     forecast,
-    prophet
+    prophet,
+    doParallel,
+    foreach
 RoxygenNote: 6.1.1
 Suggests: 
     testthat
