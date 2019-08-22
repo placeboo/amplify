@@ -1,4 +1,4 @@
-#' training and testing set split
+#' Training and testing set split
 #'
 #' @param data A data frame to be splitted.
 #' @param var The column name for dates.

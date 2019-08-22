@@ -2,7 +2,7 @@
 % Please edit documentation in R/train_test_split.R
 \name{train_test_split}
 \alias{train_test_split}
-\title{training and testing set split}
+\title{Training and testing set split}
 \usage{
 train_test_split(data, var = "date", train.window, test.window)
 }
@@ -19,7 +19,7 @@ train_test_split(data, var = "date", train.window, test.window)
 A list of training set and testing set
 }
 \description{
-training and testing set split
+Training and testing set split
 }
 \examples{
 data(tickets)

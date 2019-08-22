@@ -7,10 +7,10 @@
 nweek(date)
 }
 \arguments{
-\item{date}{A numeric vector represents dates. The format is year month day, for example, 20190801}
+\item{date}{A numeric vector represents dates. The format is year month day, for example, 20190801.}
 }
 \value{
-The data frame with two columns, date (date formate y-m-d), weekday, and the Nth weekday of the month.
+The data frame with two columns, \code{date} (date formate y-m-d), \code{weekday}, and the \code{Nth} weekday of the month.
 }
 \description{
 The given date is the Nth weekday of the month

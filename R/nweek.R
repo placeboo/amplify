@@ -1,8 +1,8 @@
 #' Nth weekday  of the month
 #'
 #' @description The given date is the Nth weekday of the month
-#' @param date A numeric vector represents dates. The format is year month day, for example, 20190801
-#' @return The data frame with two columns, date (date formate y-m-d), weekday, and the Nth weekday of the month.
+#' @param date A numeric vector represents dates. The format is year month day, for example, 20190801.
+#' @return The data frame with two columns, \code{date} (date formate y-m-d), \code{weekday}, and the \code{Nth} weekday of the month.
 #' @examples
 #' nweek(c(20190101: 20190131))
 #' @importFrom lubridate ymd year month wday
@@ -11,22 +11,10 @@
 
 nweek = function(date) {
     date = ymd(date)
-    year = year(date)
-    month = month(date)
-    weekday = wday(date)
-
-    dat = data.frame(date = date,
-                     year = year,
-                     month = month,
-                     weekday = wday(date, label = TRUE))
-
+    dat = data.frame(date = date)
     dat = dat %>%
-        group_by(year, month, weekday) %>%
-        mutate(Nth = rank(date))
-
-    dat = dat %>%
-        ungroup() %>%
-        select(date, weekday, Nth)
+        mutate(weekday = wday(date, label = TRUE),
+               Nth = ceiling(day(date) / 7))
     return(dat)
 }
 

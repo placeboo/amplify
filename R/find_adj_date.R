@@ -1,9 +1,10 @@
-#' find the the date which needs to be adjusted further
+#' Find the the date which needs to be adjusted further
 #'
 #' @param data A data frame.
 #' @param vars The column name of the data frame, date and "distance".
 #' @param lambda A number. See \code{\link{find_outlier}}.
 #' @return A list contains two data frame. One is date with fixed date, and the other one is the date with fixed weekday. In the fixed date data frame, which is called \code{fixD.dat}, there are three columns and they are the month of a year, the day of the month, and number of times the date has been treated as an outlier. In the fixed weekday data frame, which is called \code{fixWD.dat}, there are four columns and they are the month of a day, the nth week of the month, the weekday of the weekday, and the number of times such day has been treated as an outlier.
+#' @export
 
 
 find_adj_date = function(data,

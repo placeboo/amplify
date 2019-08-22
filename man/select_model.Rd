@@ -2,7 +2,7 @@
 % Please edit documentation in R/select_model.R
 \name{select_model}
 \alias{select_model}
-\title{select the optimal model}
+\title{Select the optimal model}
 \usage{
 select_model(train.y, test.y, s1 = 7, s2 = 7 * 52,
   gril.search = FALSE, search.length = c(-0.5, 0.5), length.out = 5)

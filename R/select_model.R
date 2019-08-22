@@ -1,4 +1,4 @@
-#' select the optimal model
+#' Select the optimal model
 #'
 #' @description double seasonal exponential smoothing method is implemented. If gril.search = TRUE, gril search is applied by searching parameters around the "first attemp" parameters. \code{search.length} and \code{length.out} are for grill search. The search is based on the minimum mean absolute percentage error with parallel computing. More details about parallel computing can be found in \code{doParallel}.
 #'
@@ -12,7 +12,9 @@
 #'
 #' @return A list contains an object of class \code{forecast} and a data frame of searched parameters with respect to its distance measures (see \code{\link{measure_dist}}).
 #' @importFrom forecast dshw
+#' @importFrom forecast forecast
 #' @import doParallel
+#' @import parallel
 #' @import foreach
 #' @export
 #'
