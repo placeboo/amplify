@@ -18,8 +18,10 @@ modify_pred(data, vars = c("date", "y"), time.window = NULL,
 }
 \value{
 A list includes:
-\code{h.mat} A data frame with two columns \code{date} and \code{h.hat}. \code{h.hat} is the deducating/increasing proportion of estimated time series.
-\code{fix.date}, \code{fix.weekday}, \code{holiday}, proprotion erorr for the past several years.
+\itemize{
+\item \code{h.mat} A data frame with two columns \code{date} and \code{h.hat}. \code{h.hat} is the deducating/increasing proportion of estimated time series.
+\item \code{fix.date}, \code{fix.weekday}, \code{holiday}. Proprotion erorr for the past several years.
+}
 }
 \description{
 Modify the prediction by auto-adjusting

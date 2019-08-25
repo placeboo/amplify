@@ -2,7 +2,7 @@
 #'
 #' @description Outliers are detected if it is larger than Q3 + lambda * (Q3-Q1) or smaller than Q1 - lambda * (Q3-Q1), where Q3 and Q1 are the third and first quantile of \code{x}.
 #' @param x A numeric vector.
-#' @param lambda=1.5, A number decribes the "distance" from the group \code{x}. The larger the lambda is, the number of outliers captured is less.
+#' @param lambda=1.5, a number decribes the "distance" from the group \code{x}. The larger the lambda is, the number of outliers captured is less.
 #' @return A list contains a character vector names \code{is_outlier} that indicates whether it is outier ("yes", "no"), and a numeric vector named "bounds" that stores the upper cutting line and lower cutting line.
 #' @examples
 #' x = rnorm(100, 0, 1)

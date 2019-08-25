@@ -15,7 +15,11 @@ smooth_ts(data, vars = c("date", "ts"), par = list(lambda = 1.5, s =
 \item{par}{A list of parameters. \code{lambda = 1.5}, the "distance" describes the outlier and the main population. \code{s = 7}, the most obvious seasonality of the time series is 7 (days).}
 }
 \value{
-A data frame with column name \code{is_outlier} and \code{ts}. \code{is_outlier} is a character vector that indicates whether the observation is outier ("yes", "no"). \code{ts} is a numeric vector that stores the time series after smoothing.
+A list with:
+\itemize{
+\item ts.dat. A data frame with column name \code{is_outlier} and \code{ts}. \code{is_outlier} is a character vector that indicates whether the observation is outier ("yes", "no"). \code{ts} is a numeric vector that stores the time series after smoothing.
+\item fitted. A numeric vector of the fitted values.
+}
 }
 \description{
 Smooth the time series by impute the outlers.

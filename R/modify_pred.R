@@ -6,9 +6,11 @@
 #' @param par A list of nuisance parameters. \code{lambda=1.5}, a number decribes the "distance" between the outliers and numeric variable \code{var}. \code{n}, the threshold number of times the fixed date or the fixed weekday is treated as outliers. If \code{n = NULL}, it takes the half number of years.
 #' @holiday A data frame includes \code{date} and \code{name} columns. If users want to adjust more holidays, simply add the date and name of the holidays. The \code{date} should be in date format, and the \code{name} should be charater.
 #' @return A list includes:
-#' \code{h.mat} A data frame with two columns \code{date} and \code{h.hat}. \code{h.hat} is the deducating/increasing proportion of estimated time series.
-#' \code{fix.date}, \code{fix.weekday}, \code{holiday}, proprotion erorr for the past several years.
-#' @importFrom
+#' \itemize{
+#' \item \code{h.mat} A data frame with two columns \code{date} and \code{h.hat}. \code{h.hat} is the deducating/increasing proportion of estimated time series.
+#' \item \code{fix.date}, \code{fix.weekday}, \code{holiday}. Proprotion erorr for the past several years.
+#' }
+
 #' @export
 modify_pred = function(data,
                         vars = c("date", "y"),
@@ -137,5 +139,5 @@ modify_pred = function(data,
 
     h.mat = data.frame(date = pred.date, h.hat)
 
-    list(h.mat,fix.date = fixD.hhat.mat, fix.weekday = fixWD.hhat.mat, holiday = holiday.hhat.mat)
+    list(h.mat = h.mat,fix.date = fixD.hhat.mat, fix.weekday = fixWD.hhat.mat, holiday = holiday.hhat.mat)
 }
