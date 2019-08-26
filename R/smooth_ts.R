@@ -7,7 +7,7 @@
 #' @return A list with:
 #' \itemize{
 #' \item ts.dat. A data frame with column name \code{is_outlier} and \code{ts}. \code{is_outlier} is a character vector that indicates whether the observation is outier ("yes", "no"). \code{ts} is a numeric vector that stores the time series after smoothing.
-#' \item fitted. A numeric vector of the fitted values.
+#' \item model. An object of class "ets", see \code{\link[forecast]{ets}}.
 #' }
 #'
 #' @importFrom forecast ets
@@ -39,5 +39,5 @@ smooth_ts = function(data,
     ts_new[is_outlier == "yes"] = fitted(ets.m)[is_outlier == "yes"]
 
     list(ts.dat = data.frame(is_outlier = is_outlier, ts = ts_new),
-         fitted = fitted(ets.m))
+         model = ets.m)
 }
