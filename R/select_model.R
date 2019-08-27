@@ -3,14 +3,18 @@
 #' @description double seasonal exponential smoothing method is implemented. If gril.search = TRUE, gril search is applied by searching parameters around the "first attemp" parameters. \code{search.length} and \code{length.out} are for grill search. The search is based on the minimum mean absolute percentage error with parallel computing. More details about parallel computing can be found in \code{doParallel}.
 #'
 #' @param train.y A numeric vector for training.
-#' @param test.y A numeric vector for testing.
+#' @param test.y A numeric vector for testing. If \code{gril.search = NULL}, \code{test.y = NULL}.
 #' @param s1 Period of the shorter seasonal period.
 #' @param s2 Period of the longer seasonal period.
 #' @param gril.search If TRUE, a grill search is applied.
 #' @param search.length Gril search parameter. Only used if \code{gril.search = TRUE}. It is the proportion decreasing/increasing of the first attemp parameters. For example \code{search.length = c(-0.5, 0.5)}, if the first attemp parameter is 0.1, then the searching window is from \code{0.1 * (1 - 0.5)} to \code{0.1 * (1+ 0.5)}
 #' @param length.out Gril search parameter. Only used if \code{gril.search = TRUE}. It is the desired length of search sequence.
 #'
-#' @return A list contains an object of class \code{forecast} and a data frame of searched parameters with respect to its distance measures (see \code{\link{measure_dist}}).
+#' @return If \code{gril.search = FALSE}, an object of class \code{forecast} is return. Otherwise, a list contains:
+#' \itemize{
+#' \item model. An object of class \code{forecast} ;
+#' \item cv. A data frame of searched parameters with respect to its distance measures (see \code{\link{measure_dist}})
+#' }
 #' @importFrom forecast dshw
 #' @importFrom forecast forecast
 #' @import doParallel
@@ -25,7 +29,7 @@
 #' test.y = data.ls$test.dat[,2]
 #' select.ls = select_model(train.y, test.y, gril.search = TRUE, length.out = 2)
 select_model = function(train.y,
-                        test.y,
+                        test.y = NULL,
                         s1 = 7,
                         s2 = 7 * 52,
                         gril.search = FALSE,
@@ -95,7 +99,7 @@ select_model = function(train.y,
         # the one with least mape
         opt.para = cv[which.min(cv$mape),]
 
-        model = dshw(train.y,
+        model = dshw(c(train.y, test.y),
                     period1 = 7,
                     period2 = 7 * 52,
                     alpha= opt.para$alpha,
@@ -104,7 +108,7 @@ select_model = function(train.y,
                     omega = opt.para$omega,
                     phi =opt.para$phi)
 
-        list(model, cv)
+        list(model = model, cv = cv)
     } else {
         return(org.m)
     }
