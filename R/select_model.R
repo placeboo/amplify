@@ -1,16 +1,16 @@
 #' Select the optimal model
 #'
-#' @description double seasonal exponential smoothing method is implemented. If gril.search = TRUE, gril search is applied by searching parameters around the "first attemp" parameters. \code{search.length} and \code{length.out} are for grill search. The search is based on the minimum mean absolute percentage error with parallel computing. More details about parallel computing can be found in \code{doParallel}.
+#' @description double seasonal exponential smoothing method is implemented. If grid.search = TRUE, gril search is applied by searching parameters around the "first attemp" parameters. \code{search.length} and \code{length.out} are for grill search. The search is based on the minimum mean absolute percentage error with parallel computing. More details about parallel computing can be found in \code{doParallel}.
 #'
 #' @param train.y A numeric vector for training.
-#' @param valid.y A numeric vector for testing. If \code{gril.search = NULL}, \code{valid.y = NULL}.
+#' @param valid.y A numeric vector for testing. If \code{grid.search = NULL}, \code{valid.y = NULL}.
 #' @param s1 Period of the shorter seasonal period.
 #' @param s2 Period of the longer seasonal period.
-#' @param gril.search If TRUE, a grill search is applied.
-#' @param search.length Gril search parameter. Only used if \code{gril.search = TRUE}. It is the proportion decreasing/increasing of the first attemp parameters. For example \code{search.length = c(-0.5, 0.5)}, if the first attemp parameter is 0.1, then the searching window is from \code{0.1 * (1 - 0.5)} to \code{0.1 * (1+ 0.5)}
-#' @param length.out Gril search parameter. Only used if \code{gril.search = TRUE}. It is the desired length of search sequence.
+#' @param grid.search If TRUE, a grill search is applied.
+#' @param search.length Gril search parameter. Only used if \code{grid.search = TRUE}. It is the proportion decreasing/increasing of the first attemp parameters. For example \code{search.length = c(-0.5, 0.5)}, if the first attemp parameter is 0.1, then the searching window is from \code{0.1 * (1 - 0.5)} to \code{0.1 * (1+ 0.5)}
+#' @param length.out Gril search parameter. Only used if \code{grid.search = TRUE}. It is the desired length of search sequence.
 #'
-#' @return If \code{gril.search = FALSE}, an object of class \code{forecast} is return. Otherwise, a list contains:
+#' @return If \code{grid.search = FALSE}, an object of class \code{forecast} is return. Otherwise, a list contains:
 #' \itemize{
 #' \item model. An object of class \code{forecast}. The model is built by combining training and testing;
 #' \item cv. A data frame of searched parameters with respect to its distance measures (see \code{\link{measure_dist}})
@@ -29,19 +29,19 @@
 #' data.ls = train_test_split(tickets, var = "date", train.window = c(20140701, 20180630), test.window = c(20180701, 20190630))
 #' train.y = data.ls$train.dat[,2]
 #' valid.y = data.ls$test.dat[,2]
-#' select.ls = select_model(train.y, valid.y, gril.search = TRUE, length.out = 2)
+#' select.ls = select_model(train.y, valid.y, grid.search = TRUE, length.out = 2)
 select_model = function(train.y,
                         valid.y = NULL,
                         s1 = 7,
                         s2 = 7 * 52,
-                        gril.search = FALSE,
+                        grid.search = FALSE,
                         search.length = c(-0.5, 0.5),
                         length.out = 5) {
 
 
     org.m = dshw(train.y, period1 = s1, period2 = s2)
     # don't want to do gril search
-    if (gril.search) {
+    if (grid.search) {
         no_cores = detectCores()
         cl = makeCluster(no_cores)
         registerDoParallel(cl)
