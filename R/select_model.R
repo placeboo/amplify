@@ -19,6 +19,8 @@
 #' @importFrom forecast forecast
 #' @import doParallel
 #' @importFrom parallel detectCores
+#' @importFrom parallel makeCluster
+#' @importFrom doParallel registerDoParallel
 #' @import foreach
 #' @export
 #'
