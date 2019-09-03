@@ -137,6 +137,8 @@ modify_pred = function(data,
 
     h.hat = tmp + hD.hat$h.hat
 
+    h.hat[h.hat < -1] = 0
+
     h.mat = data.frame(date = pred.date, h.hat)
 
     list(h.mat = h.mat,fix.date = fixD.hhat.mat, fix.weekday = fixWD.hhat.mat, holiday = holiday.hhat.mat)

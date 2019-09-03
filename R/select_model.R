@@ -3,7 +3,7 @@
 #' @description double seasonal exponential smoothing method is implemented. If gril.search = TRUE, gril search is applied by searching parameters around the "first attemp" parameters. \code{search.length} and \code{length.out} are for grill search. The search is based on the minimum mean absolute percentage error with parallel computing. More details about parallel computing can be found in \code{doParallel}.
 #'
 #' @param train.y A numeric vector for training.
-#' @param test.y A numeric vector for testing. If \code{gril.search = NULL}, \code{test.y = NULL}.
+#' @param valid.y A numeric vector for testing. If \code{gril.search = NULL}, \code{valid.y = NULL}.
 #' @param s1 Period of the shorter seasonal period.
 #' @param s2 Period of the longer seasonal period.
 #' @param gril.search If TRUE, a grill search is applied.
@@ -12,7 +12,7 @@
 #'
 #' @return If \code{gril.search = FALSE}, an object of class \code{forecast} is return. Otherwise, a list contains:
 #' \itemize{
-#' \item model. An object of class \code{forecast} ;
+#' \item model. An object of class \code{forecast}. The model is built by combining training and testing;
 #' \item cv. A data frame of searched parameters with respect to its distance measures (see \code{\link{measure_dist}})
 #' }
 #' @importFrom forecast dshw
@@ -26,10 +26,10 @@
 #' data(tickets)
 #' data.ls = train_test_split(tickets, var = "date", train.window = c(20140701, 20180630), test.window = c(20180701, 20190630))
 #' train.y = data.ls$train.dat[,2]
-#' test.y = data.ls$test.dat[,2]
-#' select.ls = select_model(train.y, test.y, gril.search = TRUE, length.out = 2)
+#' valid.y = data.ls$test.dat[,2]
+#' select.ls = select_model(train.y, valid.y, gril.search = TRUE, length.out = 2)
 select_model = function(train.y,
-                        test.y = NULL,
+                        valid.y = NULL,
                         s1 = 7,
                         s2 = 7 * 52,
                         gril.search = FALSE,
@@ -50,7 +50,7 @@ select_model = function(train.y,
         gamma0 = org.m$model$gamma
         omega0 = org.m$model$omega
         phi0 = org.m$model$phi
-        org.vec  = c(alpha0, beta0, gamma0, omega0, phi0, measure_dist(forecast(org.m, h=length(test.y))$mean, test.y))
+        org.vec  = c(alpha0, beta0, gamma0, omega0, phi0, measure_dist(forecast(org.m, h=length(valid.y))$mean, valid.y))
 
         # build gril
         alpha.vec = seq(alpha0 * (1 + search.length[1]), min(alpha0 * (1 + search.length[2]), 1), length.out = length.out)
@@ -78,8 +78,8 @@ select_model = function(train.y,
                                          omega = omega,
                                          phi = phi)
 
-                            pred.ls = forecast(model, h = length(test.y))
-                            test.dist = measure_dist(pred.ls$mean, test.y)
+                            pred.ls = forecast(model, h = length(valid.y))
+                            test.dist = measure_dist(pred.ls$mean, valid.y)
                             data.frame(alpha = alpha,
                                        beta = beta,
                                        gamma = gamma,
@@ -99,7 +99,7 @@ select_model = function(train.y,
         # the one with least mape
         opt.para = cv[which.min(cv$mape),]
 
-        model = dshw(c(train.y, test.y),
+        model = dshw(c(train.y, valid.y),
                     period1 = 7,
                     period2 = 7 * 52,
                     alpha= opt.para$alpha,

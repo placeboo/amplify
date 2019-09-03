@@ -4,13 +4,13 @@
 \alias{select_model}
 \title{Select the optimal model}
 \usage{
-select_model(train.y, test.y = NULL, s1 = 7, s2 = 7 * 52,
+select_model(train.y, valid.y = NULL, s1 = 7, s2 = 7 * 52,
   gril.search = FALSE, search.length = c(-0.5, 0.5), length.out = 5)
 }
 \arguments{
 \item{train.y}{A numeric vector for training.}
 
-\item{test.y}{A numeric vector for testing. If \code{gril.search = NULL}, \code{test.y = NULL}.}
+\item{valid.y}{A numeric vector for testing. If \code{gril.search = NULL}, \code{valid.y = NULL}.}
 
 \item{s1}{Period of the shorter seasonal period.}
 
@@ -25,7 +25,7 @@ select_model(train.y, test.y = NULL, s1 = 7, s2 = 7 * 52,
 \value{
 If \code{gril.search = FALSE}, an object of class \code{forecast} is return. Otherwise, a list contains:
 \itemize{
-\item model. An object of class \code{forecast} ;
+\item model. An object of class \code{forecast}. The model is built by combining training and testing;
 \item cv. A data frame of searched parameters with respect to its distance measures (see \code{\link{measure_dist}})
 }
 }
@@ -36,6 +36,6 @@ double seasonal exponential smoothing method is implemented. If gril.search = TR
 data(tickets)
 data.ls = train_test_split(tickets, var = "date", train.window = c(20140701, 20180630), test.window = c(20180701, 20190630))
 train.y = data.ls$train.dat[,2]
-test.y = data.ls$test.dat[,2]
-select.ls = select_model(train.y, test.y, gril.search = TRUE, length.out = 2)
+valid.y = data.ls$test.dat[,2]
+select.ls = select_model(train.y, valid.y, gril.search = TRUE, length.out = 2)
 }
