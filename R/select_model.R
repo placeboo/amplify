@@ -18,7 +18,7 @@
 #' @importFrom forecast dshw
 #' @importFrom forecast forecast
 #' @import doParallel
-#' @import parallel
+#' @import parallel detectCores
 #' @import foreach
 #' @export
 #'
