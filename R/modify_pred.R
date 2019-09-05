@@ -10,7 +10,6 @@
 #' \item \code{h.mat} A data frame with two columns \code{date} and \code{h.hat}. \code{h.hat} is the deducating/increasing proportion of estimated time series.
 #' \item \code{fix.date}, \code{fix.weekday}, \code{holiday}. Proprotion erorr for the past several years.
 #' }
-
 #' @export
 modify_pred = function(data,
                         vars = c("date", "y"),
