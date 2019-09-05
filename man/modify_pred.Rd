@@ -15,6 +15,8 @@ modify_pred(data, vars = c("date", "y"), time.window = NULL,
 \item{time.window}{A numeric vector shows the begining date and ending date, see \code{\link{build_date}}.}
 
 \item{par}{A list of nuisance parameters. \code{lambda=1.5}, a number decribes the "distance" between the outliers and numeric variable \code{var}. \code{n}, the threshold number of times the fixed date or the fixed weekday is treated as outliers. If \code{n = NULL}, it takes the half number of years.}
+
+\item{holiday}{A data frame includes \code{date} and \code{name} columns. If users want to adjust more holidays, simply add the date and name of the holidays. The \code{date} should be in date format, and the \code{name} should be charater.}
 }
 \value{
 A list includes:

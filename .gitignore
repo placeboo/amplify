@@ -1,6 +1,5 @@
 *.Rproj.user
 *.Rhistory
-tickets.RData
 *.csv
 *.Ruserdata
 .Rproj.user
