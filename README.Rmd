@@ -1,0 +1,183 @@
+---
+title: "Amplify Package: Double seasonal daily time series"
+author:
+- name: Jiaqi (Jackie) Yin
+output: 
+    github_document:
+      html_preview: true
+      toc: yes
+      toc_depth: 2
+      df_print: kable
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, message = FALSE, warning = FALSE, fig.width = 12, fig.height = 6, cache = TRUE)
+```
+
+```{r library, echo=FALSE}
+library(tidyverse)
+library(forecast)
+library(lubridate)
+library(tictoc)
+```
+
+```{r ggplot-setting, echo = FALSE}
+theme_set(theme_bw() + 
+            theme(axis.text.x = element_text(color = "grey20", size = 18, face = "plain"),
+                  axis.text.y = element_text(color = "grey20", size = 18, face = "plain"),
+                  axis.title.x = element_text(color = "grey20", size =20, face = "bold"),
+                  axis.title.y = element_text(color = "grey20", size = 20, face = "bold"),
+                  legend.text = element_text(size = 18),
+                  legend.title = element_text(size = 20, face = "bold"),
+                  strip.text.x = element_text(size=18, face="bold")))
+```
+Our package is for double seasonal daily time seriers. Data features include outliers, variation increasing/decreasing, and double seasonality. We build multiplicative modeling for time series.
+
+In this document, we explain how to use our R package. 
+
+To showing the steps, we forecast the some airline supporting tickets for FY20 as an example.
+
+## Install R package
+
+Install the package from github
+
+```{r install, eval=FALSE}
+devtools::install_github("placeboo/amplify", force = TRUE)
+```
+We start from loading our package `Amplify`.
+
+```{r load-our-package}
+library(amplify)
+```
+We have support ticket from 2014-07-01 to 2018-06-10.
+A glimpse of the data:
+```{r load-data, echo=FALSE}
+load("../forecast-book-final/data/tickets_20140701_20190731.RData")
+tickets %>%
+    filter(date < ymd(20140710))
+```
+
+In the package, we have a holiday data set. For forecasting, you can add your own holiday information. It should include the date and the name of the holidays. Have a look:
+
+```{r load-holiday}
+data("holiday")
+head(holiday)
+```
+```{r, echo= FALSE}
+tickets = tickets %>%
+  filter(date <= ymd(20190630))
+```
+
+## Smoothing 
+
+The whole data set is our training set. We aim to predict the daily tickets from 2019-07-01 to 2020-06-30. First we detect the outiers and impute them with reasonable value.
+
+```{r smooth}
+smooth.ls = smooth_ts(data = tickets,
+                      vars = c("date", "ticket"),
+                      par = list(lambda = 1.5, s = 7))
+
+train.dat = cbind(tickets, smooth.ls$ts.dat)
+head(train.dat) 
+```
+
+## Validation
+
+We split the data set into subtraining set and validation set to find parameters.
+There are 5 parameters $\{\alpha, \beta, \gamma, \omega, \phi \}$ in the model. We use grid search to find a set of optimal parameters. The searching process has been optimized by parallel computing. 
+
+```{r split-data}
+train.start = 20140701
+train.end = 20190630
+
+subtrain.end = 20190430
+valid.start = 20190501
+
+valid.ls = train_test_split(train.dat,
+                            train.window = c(train.start, subtrain.end),
+                            test.window = c(valid.start, train.end))
+
+subtrain.dat = valid.ls$train.dat
+valid.dat = valid.ls$test.dat
+```
+
+```{r valid}
+tic("grid search")
+select.ls = select_model(train.y = subtrain.dat$ts,
+                         valid.y = valid.dat$ts,
+                         grid.search = TRUE,
+                         search.length = c(-0.5, 0.5), 
+                         length.out = 5)
+toc()
+```
+
+The list `select.ls` contains the model which has the smallest MAPE for validation set, and the validation resutls.
+
+```{r cv}
+cv = select.ls$cv
+head(cv) 
+```
+
+We pick the parameters which yeild the lowest MAPE. 
+
+```{r mape}
+cv[which.min(cv$mape), ]
+```
+
+## Prediction
+
+We first build a future data frame
+
+```{r build-future}
+pred.dat = build_date(20190701, 20200630)
+head(pred.dat) 
+```
+Within the data frame, we fill the predicted tickets. 
+```{r predict}
+model = select.ls$model
+
+pred.ls = forecast(model, h = nrow(pred.dat))
+pred = as.numeric(pred.ls$mean)
+pred.dat = pred.dat %>%
+  mutate(pred = pred)
+
+head(pred.dat) 
+```
+
+## Holiday Modification
+
+We define the distance between the actual and predictiona and then adjust the holidays.
+
+```{r resid}
+tmp = cbind(train.dat, pred = as.numeric(fitted(model)))
+tmp = tmp %>%
+  mutate(resid = (ticket - pred) / pred)
+```
+
+In order to capture floating holidays such as Easter, we add more information about Holidays. 
+
+```{r holiday}
+modify.ls = modify_pred(tmp,
+                        vars = c("date", "resid"),
+                        time.window = c(20190701, 20200630),
+                        par = list(lambda = 1.5, n = 3), 
+                        holiday = holiday)
+
+h.hat =  modify.ls$h.mat$h.hat
+h.hat[h.hat > 0] = 0
+pred.dat = pred.dat %>%
+  mutate(h.hat = h.hat,
+         pred_modify = pred * (1 + h.hat))
+```
+
+```{r plot, fig.cap="Prediction of FY20"}
+pred.dat %>%
+  ggplot(aes(x = date, y = pred_modify)) +
+  geom_point(size = 2, alpha = 0.6) + 
+  geom_line() +
+  scale_x_date(name = "Date",
+                date_breaks = "1 month") + 
+  ylab("Tickets") + 
+  theme(axis.text.x = element_text(angle = 30, hjust = 1))
+```
+
