@@ -1,7 +1,6 @@
 ---
 title: "Amplify Package: Double seasonal daily time series"
-author:
-- name: Jiaqi (Jackie) Yin
+author: Jiaqi (Jackie) Yin
 output: 
     github_document:
       html_preview: true

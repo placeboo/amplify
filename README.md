@@ -1,6 +1,6 @@
 Amplify Package: Double seasonal daily time series
 ================
-true
+Jiaqi (Jackie) Yin
 
   - [Install R package](#install-r-package)
   - [Smoothing](#smoothing)
