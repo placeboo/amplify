@@ -4,7 +4,7 @@
 \alias{find_adj_date}
 \title{Find the the date which needs to be adjusted further}
 \usage{
-find_adj_date(data, vars = c("date", "y"), lambda = 1.5)
+find_adj_date(data, vars = c("date", "y"), lambda = 1.5, weekday.sep = FALSE)
 }
 \arguments{
 \item{data}{A data frame.}
@@ -12,6 +12,8 @@ find_adj_date(data, vars = c("date", "y"), lambda = 1.5)
 \item{vars}{The column name of the data frame, date and "distance".}
 
 \item{lambda}{A number. See \code{\link{find_outlier}}.}
+
+\item{weekday.sep}{A logical value indicating whether find outliers separately by weekdays}
 }
 \value{
 A list contains two data frame. One is date with fixed date, and the other one is the date with fixed weekday. In the fixed date data frame, which is called \code{fixD.dat}, there are three columns and they are the month of a year, the day of the month, and number of times the date has been treated as an outlier. In the fixed weekday data frame, which is called \code{fixWD.dat}, there are four columns and they are the month of a day, the nth week of the month, the weekday of the weekday, and the number of times such day has been treated as an outlier.

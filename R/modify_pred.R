@@ -5,6 +5,8 @@
 #' @param time.window A numeric vector shows the begining date and ending date, see \code{\link{build_date}}.
 #' @param par A list of nuisance parameters. \code{lambda=1.5}, a number decribes the "distance" between the outliers and numeric variable \code{var}. \code{n}, the threshold number of times the fixed date or the fixed weekday is treated as outliers. If \code{n = NULL}, it takes the half number of years.
 #' @param holiday A data frame includes \code{date} and \code{name} columns. If users want to adjust more holidays, simply add the date and name of the holidays. The \code{date} should be in date format, and the \code{name} should be charater.
+#' @param weekday.sep A logical value indicating whether modify the value separately by weekdays
+#'
 #' @return A list includes:
 #' \itemize{
 #' \item \code{h.mat} A data frame with two columns \code{date} and \code{h.hat}. \code{h.hat} is the deducating/increasing proportion of estimated time series.
@@ -16,7 +18,12 @@ modify_pred = function(data,
                         time.window = NULL,
                         par = list(lambda = 1.5,
                                    n = NULL),
-                        holiday = NULL) {
+                        holiday = NULL,
+                       weekday.sep = FALSE) {
+
+
+    op = options(dplyr.summarise.inform = FALSE)
+    on.exit(options(op))
     # organize input ----------------------------------
     data$date = pull(data, vars[1])
     data$y = pull(data, vars[2])
@@ -34,7 +41,7 @@ modify_pred = function(data,
         par$n = floor(length(unique(year(data$date)))/2)
     }
 
-    # generate futher date for prediction----------------------------------
+    # generate further date for prediction----------------------------------
     if (is.null(time.window)) {
         pred.date = build_date(max(data$date), max(data$date) + 7)
     } else {
@@ -50,10 +57,18 @@ modify_pred = function(data,
                is_weekend = weekday %in% c(1,7))
     pred.dat$Nth = nweek(pred.dat$date)$Nth
 
-    #------------ adjuste date ---------------------------#
-    adjDate = find_adj_date(data,
-                         vars = vars,
-                         lambda = par$lambda)
+    #------------ adjust date ---------------------------#
+    if (weekday.sep) {
+        adjDate = find_adj_date(data,
+                                vars = vars,
+                                lambda = par$lambda,
+                                weekday.sep = TRUE)
+    } else {
+        adjDate = find_adj_date(data,
+                                vars = vars,
+                                lambda = par$lambda)
+    }
+
 
     fixD.dat = adjDate$fixD.dat
     fixWD.dat = adjDate$fixWD.dat

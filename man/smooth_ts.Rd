@@ -8,7 +8,7 @@ smooth_ts(
   data,
   vars = c("date", "ts"),
   par = list(lambda = 1.5, s = 7),
-  week.sep = FALSE
+  weekday.sep = FALSE
 )
 }
 \arguments{
@@ -18,7 +18,7 @@ smooth_ts(
 
 \item{par}{A list of parameters. \code{lambda = 1.5}, the "distance" describes the outlier and the main population. \code{s = 7}, the most obvious seasonality of the time series is 7 (days).}
 
-\item{week.sep}{A logical value indicating whether model each weekday time series separately.}
+\item{weekday.sep}{A logical value indicating whether model each weekday time series separately.}
 }
 \value{
 A list with:

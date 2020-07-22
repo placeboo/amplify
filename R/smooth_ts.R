@@ -4,7 +4,7 @@
 #' @param data A data frame includes dates and time series columns
 #' @param vars A character vector with variable names with respect to date and time series
 #' @param par A list of parameters. \code{lambda = 1.5}, the "distance" describes the outlier and the main population. \code{s = 7}, the most obvious seasonality of the time series is 7 (days).
-#' @param week.sep A logical value indicating whether model each weekday time series separately.
+#' @param weekday.sep A logical value indicating whether model each weekday time series separately.
 #' @return A list with:
 #' \itemize{
 #' \item ts.dat. A data frame with column name \code{is_outlier} and \code{ts}. \code{is_outlier} is a character vector that indicates whether the observation is outier ("yes", "no"). \code{ts} is a numeric vector that stores the time series after smoothing.
@@ -25,12 +25,12 @@ smooth_ts = function(data,
                   vars = c("date", "ts"),
                   par = list(lambda = 1.5,
                              s = 7),
-                  week.sep = FALSE) {
+                  weekday.sep = FALSE) {
 
     data$date = as.Date(pull(data, vars[1]))
     data$ts = pull(data, vars[2])
 
-    if (week.sep) { # model each weekday separately
+    if (weekday.sep) { # model each weekday separately
 
         data$weekday = wday(data$date)
         is_outlier = rep("no", nrow(data))
