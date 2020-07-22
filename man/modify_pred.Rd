@@ -4,8 +4,13 @@
 \alias{modify_pred}
 \title{Modify the prediction by auto-adjusting}
 \usage{
-modify_pred(data, vars = c("date", "y"), time.window = NULL,
-  par = list(lambda = 1.5, n = NULL), holiday = NULL)
+modify_pred(
+  data,
+  vars = c("date", "y"),
+  time.window = NULL,
+  par = list(lambda = 1.5, n = NULL),
+  holiday = NULL
+)
 }
 \arguments{
 \item{data}{A data framem includes a column called \code{date}.}

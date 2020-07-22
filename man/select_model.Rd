@@ -4,8 +4,15 @@
 \alias{select_model}
 \title{Select the optimal model}
 \usage{
-select_model(train.y, valid.y = NULL, s1 = 7, s2 = 7 * 52,
-  grid.search = FALSE, search.length = c(-0.5, 0.5), length.out = 5)
+select_model(
+  train.y,
+  valid.y = NULL,
+  s1 = 7,
+  s2 = 7 * 52,
+  grid.search = FALSE,
+  search.length = c(-0.5, 0.5),
+  length.out = 5
+)
 }
 \arguments{
 \item{train.y}{A numeric vector for training.}
@@ -16,7 +23,7 @@ select_model(train.y, valid.y = NULL, s1 = 7, s2 = 7 * 52,
 
 \item{s2}{Period of the longer seasonal period.}
 
-\item{grid.search}{If TRUE, a grill search is applied.}
+\item{grid.search}{If TRUE, a grid search is applied.}
 
 \item{search.length}{Gril search parameter. Only used if \code{grid.search = TRUE}. It is the proportion decreasing/increasing of the first attemp parameters. For example \code{search.length = c(-0.5, 0.5)}, if the first attemp parameter is 0.1, then the searching window is from \code{0.1 * (1 - 0.5)} to \code{0.1 * (1+ 0.5)}}
 
@@ -30,7 +37,7 @@ If \code{grid.search = FALSE}, an object of class \code{forecast} is return. Oth
 }
 }
 \description{
-double seasonal exponential smoothing method is implemented. If grid.search = TRUE, gril search is applied by searching parameters around the "first attemp" parameters. \code{search.length} and \code{length.out} are for grill search. The search is based on the minimum mean absolute percentage error with parallel computing. More details about parallel computing can be found in \code{doParallel}.
+double seasonal exponential smoothing method is implemented. If grid.search = TRUE, grid search is applied by searching parameters around the "first attemp" parameters. \code{search.length} and \code{length.out} are for grid search. The search is based on the minimum mean absolute percentage error with parallel computing. More details about parallel computing can be found in \code{doParallel}.
 }
 \examples{
 data(tickets)
