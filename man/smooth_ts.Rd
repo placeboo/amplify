@@ -4,8 +4,12 @@
 \alias{smooth_ts}
 \title{Smooth time series}
 \usage{
-smooth_ts(data, vars = c("date", "ts"), par = list(lambda = 1.5, s =
-  7))
+smooth_ts(
+  data,
+  vars = c("date", "ts"),
+  par = list(lambda = 1.5, s = 7),
+  week.sep = FALSE
+)
 }
 \arguments{
 \item{data}{A data frame includes dates and time series columns}
@@ -13,6 +17,8 @@ smooth_ts(data, vars = c("date", "ts"), par = list(lambda = 1.5, s =
 \item{vars}{A character vector with variable names with respect to date and time series}
 
 \item{par}{A list of parameters. \code{lambda = 1.5}, the "distance" describes the outlier and the main population. \code{s = 7}, the most obvious seasonality of the time series is 7 (days).}
+
+\item{week.sep}{A logical value indicating whether model each weekday time series separately.}
 }
 \value{
 A list with:
