@@ -1,7 +1,7 @@
 Package: amplify
 Type: Package
 Title: Forecasting Daily Time Seriers with Double Seasonal Patterns
-Version: 0.1.0
+Version: 0.2.0
 Authors@R: person("Jiaqi (Jackie)", "Yin", email = "jiaqiyin1014@gmail.com",
   role = c("aut", "cre"))
 Description: Forecasting daily time seriers with 
