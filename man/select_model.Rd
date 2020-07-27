@@ -25,9 +25,9 @@ select_model(
 
 \item{grid.search}{If TRUE, a grid search is applied.}
 
-\item{search.length}{Gril search parameter. Only used if \code{grid.search = TRUE}. It is the proportion decreasing/increasing of the first attemp parameters. For example \code{search.length = c(-0.5, 0.5)}, if the first attemp parameter is 0.1, then the searching window is from \code{0.1 * (1 - 0.5)} to \code{0.1 * (1+ 0.5)}}
+\item{search.length}{Grid search parameter. Only used if \code{grid.search = TRUE}. It is the proportion decreasing/increasing of the first attempt parameters. For example \code{search.length = c(-0.5, 0.5)}, if the first attempt parameter is 0.1, then the searching window is from \code{0.1 * (1 - 0.5)} to \code{0.1 * (1+ 0.5)}}
 
-\item{length.out}{Gril search parameter. Only used if \code{grid.search = TRUE}. It is the desired length of search sequence.}
+\item{length.out}{Grid search parameter. Only used if \code{grid.search = TRUE}. It is the desired length of search sequence.}
 }
 \value{
 If \code{grid.search = FALSE}, an object of class \code{forecast} is return. Otherwise, a list contains:
@@ -37,7 +37,7 @@ If \code{grid.search = FALSE}, an object of class \code{forecast} is return. Oth
 }
 }
 \description{
-double seasonal exponential smoothing method is implemented. If grid.search = TRUE, grid search is applied by searching parameters around the "first attemp" parameters. \code{search.length} and \code{length.out} are for grid search. The search is based on the minimum mean absolute percentage error with parallel computing. More details about parallel computing can be found in \code{doParallel}.
+double seasonal exponential smoothing method is implemented. If grid.search = TRUE, grid search is applied by searching parameters around the "first attempt" parameters. \code{search.length} and \code{length.out} are for grid search. The search is based on the minimum mean absolute percentage error with parallel computing. More details about parallel computing can be found in \code{doParallel}.
 }
 \examples{
 data(tickets)
