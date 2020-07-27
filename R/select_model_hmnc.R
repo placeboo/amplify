@@ -1,4 +1,4 @@
-#' Select the optimal model
+#' Select the optimal Harmonic Regression Model
 #'
 #' @description double seasonal harmonic regression is implemented. If grid.search = TRUE, grid search is applied by searching the number of Fourier terms for yearly seasonality. \code{search.length} and \code{length.out} are for grid search. The search is based on the minimum mean absolute percentage error with parallel computing. More details about parallel computing can be found in \code{doParallel}.
 #'
@@ -10,10 +10,10 @@
 #' @param search.length Grid search parameter. Only used if \code{grid.search = TRUE}. It is the range of the number of the Fourier term of yearly seasonality.
 #' @param length.out Grid search parameter. Only used if \code{grid.search = TRUE}. It is the desired length of search sequence.
 #'
-#' @return a list contains:
+#' @return A list contains:
 #' \itemize{
 #' \item model. An object of class \code{forecast}. The model is built by combining training and testing;
-#' \item K. A vector display the number of Fourier term for weekly seaonality and yearly seasonality.
+#' \item K. A vector display the number of Fourier term for weekly seasonality and yearly seasonality.
 #' \item cv. A data frame of searched parameters with respect to its distance measures (see \code{\link{measure_dist}})
 #' }
 #' @importFrom forecast fourier

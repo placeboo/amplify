@@ -2,7 +2,7 @@
 % Please edit documentation in R/select_model_hmnc.R
 \name{select_model_hmnc}
 \alias{select_model_hmnc}
-\title{Select the optimal model}
+\title{Select the optimal Harmonic Regression Model}
 \usage{
 select_model_hmnc(
   train.y,
@@ -30,10 +30,10 @@ select_model_hmnc(
 \item{length.out}{Grid search parameter. Only used if \code{grid.search = TRUE}. It is the desired length of search sequence.}
 }
 \value{
-a list contains:
+A list contains:
 \itemize{
 \item model. An object of class \code{forecast}. The model is built by combining training and testing;
-\item K. A vector display the number of Fourier term for weekly seaonality and yearly seasonality.
+\item K. A vector display the number of Fourier term for weekly seasonality and yearly seasonality.
 \item cv. A data frame of searched parameters with respect to its distance measures (see \code{\link{measure_dist}})
 }
 }
