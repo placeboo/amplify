@@ -1,14 +1,14 @@
 #' Select the optimal model
 #'
-#' @description double seasonal exponential smoothing method is implemented. If grid.search = TRUE, grid search is applied by searching parameters around the "first attemp" parameters. \code{search.length} and \code{length.out} are for grid search. The search is based on the minimum mean absolute percentage error with parallel computing. More details about parallel computing can be found in \code{doParallel}.
+#' @description double seasonal exponential smoothing method is implemented. If grid.search = TRUE, grid search is applied by searching parameters around the "first attempt" parameters. \code{search.length} and \code{length.out} are for grid search. The search is based on the minimum mean absolute percentage error with parallel computing. More details about parallel computing can be found in \code{doParallel}.
 #'
 #' @param train.y A numeric vector for training.
 #' @param valid.y A numeric vector for testing. If \code{grid.search = NULL}, \code{valid.y = NULL}.
 #' @param s1 Period of the shorter seasonal period.
 #' @param s2 Period of the longer seasonal period.
 #' @param grid.search If TRUE, a grid search is applied.
-#' @param search.length Gril search parameter. Only used if \code{grid.search = TRUE}. It is the proportion decreasing/increasing of the first attemp parameters. For example \code{search.length = c(-0.5, 0.5)}, if the first attemp parameter is 0.1, then the searching window is from \code{0.1 * (1 - 0.5)} to \code{0.1 * (1+ 0.5)}
-#' @param length.out Gril search parameter. Only used if \code{grid.search = TRUE}. It is the desired length of search sequence.
+#' @param search.length Grid search parameter. Only used if \code{grid.search = TRUE}. It is the proportion decreasing/increasing of the first attempt parameters. For example \code{search.length = c(-0.5, 0.5)}, if the first attempt parameter is 0.1, then the searching window is from \code{0.1 * (1 - 0.5)} to \code{0.1 * (1+ 0.5)}
+#' @param length.out Grid search parameter. Only used if \code{grid.search = TRUE}. It is the desired length of search sequence.
 #'
 #' @return If \code{grid.search = FALSE}, an object of class \code{forecast} is return. Otherwise, a list contains:
 #' \itemize{
