@@ -72,8 +72,8 @@ select_model = function(train.y,
                     foreach(omega = omega.vec, .combine = rbind) %dopar% {
                         foreach(phi = phi.vec, .combine = rbind) %dopar% {
                             model = dshw(train.y,
-                                         period1 = 7,
-                                         period2 = 7 * 52,
+                                         period1 = s1,
+                                         period2 = s2,
                                          alpha= alpha,
                                          beta = beta,
                                          gamma = gamma,
@@ -102,8 +102,8 @@ select_model = function(train.y,
         opt.para = cv[which.min(cv$mape),]
 
         model = dshw(c(train.y, valid.y),
-                    period1 = 7,
-                    period2 = 7 * 52,
+                    period1 = s1,
+                    period2 = s2,
                     alpha= opt.para$alpha,
                     beta = opt.para$beta,
                     gamma = opt.para$gamma,
