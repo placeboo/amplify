@@ -11,7 +11,9 @@ select_model(
   s2 = 7 * 52,
   grid.search = FALSE,
   search.length = c(-0.5, 0.5),
-  length.out = 5
+  length.out = 5,
+  CV = FALSE,
+  kfold = NULL
 )
 }
 \arguments{
@@ -28,6 +30,10 @@ select_model(
 \item{search.length}{Grid search parameter. Only used if \code{grid.search = TRUE}. It is the proportion decreasing/increasing of the first attempt parameters. For example \code{search.length = c(-0.5, 0.5)}, if the first attempt parameter is 0.1, then the searching window is from \code{0.1 * (1 - 0.5)} to \code{0.1 * (1+ 0.5)}}
 
 \item{length.out}{Grid search parameter. Only used if \code{grid.search = TRUE}. It is the desired length of search sequence.}
+
+\item{CV}{If TRUE, k-fold cross validation applied}
+
+\item{kfold}{The number of K-fold}
 }
 \value{
 If \code{grid.search = FALSE}, an object of class \code{forecast} is return. Otherwise, a list contains:
@@ -45,4 +51,5 @@ data.ls = train_test_split(tickets, var = "date", train.window = c(20140701, 201
 train.y = data.ls$train.dat[,2]
 valid.y = data.ls$test.dat[,2]
 select.ls = select_model(train.y, valid.y, grid.search = TRUE, length.out = 2)
+Double seasonal exponential time series cross validation
 }

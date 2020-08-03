@@ -9,6 +9,9 @@
 #' @param grid.search If TRUE, a grid search is applied.
 #' @param search.length Grid search parameter. Only used if \code{grid.search = TRUE}. It is the proportion decreasing/increasing of the first attempt parameters. For example \code{search.length = c(-0.5, 0.5)}, if the first attempt parameter is 0.1, then the searching window is from \code{0.1 * (1 - 0.5)} to \code{0.1 * (1+ 0.5)}
 #' @param length.out Grid search parameter. Only used if \code{grid.search = TRUE}. It is the desired length of search sequence.
+#' @param CV If TRUE, k-fold cross validation applied
+#' @param kfold The number of K-fold
+#'
 #'
 #' @return If \code{grid.search = FALSE}, an object of class \code{forecast} is return. Otherwise, a list contains:
 #' \itemize{
@@ -36,7 +39,9 @@ select_model = function(train.y,
                         s2 = 7 * 52,
                         grid.search = FALSE,
                         search.length = c(-0.5, 0.5),
-                        length.out = 5) {
+                        length.out = 5,
+                        CV = FALSE,
+                        kfold = NULL) {
 
 
     org.m = dshw(train.y, period1 = s1, period2 = s2)
@@ -52,7 +57,7 @@ select_model = function(train.y,
         gamma0 = org.m$model$gamma
         omega0 = org.m$model$omega
         phi0 = org.m$model$phi
-        org.vec  = c(alpha0, beta0, gamma0, omega0, phi0, measure_dist(forecast(org.m, h=length(valid.y))$mean, valid.y))
+
 
         # build grid
         alpha.vec = seq(alpha0 * (1 + search.length[1]), min(alpha0 * (1 + search.length[2]), 1), length.out = length.out)
@@ -71,17 +76,16 @@ select_model = function(train.y,
                 foreach(gamma = gamma.vec, .combine = rbind) %dopar% {
                     foreach(omega = omega.vec, .combine = rbind) %dopar% {
                         foreach(phi = phi.vec, .combine = rbind) %dopar% {
-                            model = dshw(train.y,
-                                         period1 = s1,
-                                         period2 = s2,
-                                         alpha= alpha,
-                                         beta = beta,
-                                         gamma = gamma,
-                                         omega = omega,
-                                         phi = phi)
+                            if (CV) {
 
-                            pred.ls = forecast(model, h = length(valid.y))
-                            test.dist = measure_dist(pred.ls$mean, valid.y)
+                                # cross validation
+                                test.dist = dstsCV(train.y, valid.y, s1, s2, kfold, par = list(alpha, beta, gamma, omega, phi))
+                            } else {
+                                # traditional validation
+                                test.dist = dstsCV(train.y, valid.y, s1, s2, 1, par = list(alpha, beta, gamma, omega, phi))
+
+                            }
+
                             data.frame(alpha = alpha,
                                        beta = beta,
                                        gamma = gamma,
@@ -96,7 +100,8 @@ select_model = function(train.y,
                 }
             }
         }
-        cv = rbind(org.vec, cv)
+        #' Double seasonal exponential time series cross validation
+
         colnames(cv) = c("alpha", "beta", "gamma", "omega", "phi", "me", "rmse", "mpe", "mape")
         # the one with least mape
         opt.para = cv[which.min(cv$mape),]
