@@ -4,3 +4,7 @@
 *.Ruserdata
 .Rproj.user
 how-to-use*
+README_cache/
+.gitignore
+demo.R
+test-cv.R
