@@ -120,6 +120,15 @@ select_model = function(train.y,
         list(model = model, cv = cv)
     } else {
 
+        model = dshw(c(train.y, valid.y),
+                     period1 = s1,
+                     period2 = s2,
+                     alpha= alpha0,
+                     beta = beta0,
+                     gamma = gamma0,
+                     omega = omega0,
+                     phi =phi0)
+
         test.dist = measure_dist(forecast(org.m, h=length(valid.y))$mean, valid.y)
 
         cv = data.frame(alpha = alpha0,
@@ -131,6 +140,6 @@ select_model = function(train.y,
                         rmse = test.dist[2],
                         mpe = test.dist[3],
                         mape = test.dist[4])
-        return( list(model = org.m, cv = cv))
+        return( list(model = model, cv = cv))
     }
 }
