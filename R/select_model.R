@@ -45,6 +45,14 @@ select_model = function(train.y,
 
 
     org.m = dshw(train.y, period1 = s1, period2 = s2)
+
+    alpha0 = org.m$model$alpha
+    beta0  = org.m$model$beta
+    gamma0 = org.m$model$gamma
+    omega0 = org.m$model$omega
+    phi0 = org.m$model$phi
+
+
     # don't want to do grid search
     if (grid.search) {
         no_cores = detectCores()
@@ -52,12 +60,6 @@ select_model = function(train.y,
         registerDoParallel(cl)
 
         # model built on train.y is for reference
-        alpha0 = org.m$model$alpha
-        beta0  = org.m$model$beta
-        gamma0 = org.m$model$gamma
-        omega0 = org.m$model$omega
-        phi0 = org.m$model$phi
-
 
         # build grid
         alpha.vec = seq(alpha0 * (1 + search.length[1]), min(alpha0 * (1 + search.length[2]), 1), length.out = length.out)
@@ -117,6 +119,18 @@ select_model = function(train.y,
 
         list(model = model, cv = cv)
     } else {
-        return(org.m)
+
+        test.dist = measure_dist(forecast(org.m, h=length(valid.y))$mean, valid.y)
+
+        cv = data.frame(alpha = alpha0,
+                        beta = beta0,
+                        gamma = gamma0,
+                        omega = omega0,
+                        phi = phi0,
+                        me = test.dist[1],
+                        rmse = test.dist[2],
+                        mpe = test.dist[3],
+                        mape = test.dist[4])
+        return( list(model = org.m, cv = cv))
     }
 }
