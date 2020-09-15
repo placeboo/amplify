@@ -8,3 +8,6 @@ README_cache/
 .gitignore
 demo.R
 test-cv.R
+dstsCV_test.R
+model_select_test.R
+data/

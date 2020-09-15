@@ -55,7 +55,7 @@ select_model = function(train.y,
 
     # don't want to do grid search
     if (grid.search) {
-        no_cores = detectCores()
+        no_cores = parallel::detectCores()
         cl = makeCluster(no_cores)
         registerDoParallel(cl)
 
