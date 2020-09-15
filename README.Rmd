@@ -1,5 +1,6 @@
 ---
-title: "Amplify Package: Double seasonal daily time series"
+title: "Amplify Package: Double seasonal daily time series (Update 0.2.0)"
+date: "09/15/2020"
 author: Jiaqi (Jackie) Yin
 output: 
     github_document:
@@ -8,6 +9,8 @@ output:
       toc_depth: 2
       df_print: kable
 ---
+
+I have leveraged more features to the Amplify Package. Now we release the updated version 0.2.0. The latest one update functions `modify_pred`, `smooth_ts`. `find_adj_date`, and `select_model`. For the first three functions, I have added a mode called `weekday.sep = FALSE`. If the `weekday.sep = TRUE`, one of the seasonal pattern is weekly and time series is implemented respectively according to their weekdays. In `select_model`, I have added cross validation option. See more details below. 
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE, message = FALSE, warning = FALSE, fig.width = 12, fig.height = 6, cache = TRUE)
@@ -51,7 +54,7 @@ library(amplify)
 We have support ticket from 2014-07-01 to 2018-06-10.
 A glimpse of the data:
 ```{r load-data, echo=FALSE}
-load("../forecast-book-final/data/tickets_20140701_20190731.RData")
+load("data/ticket.RData")
 tickets %>%
     filter(date < ymd(20140710))
 ```
@@ -74,7 +77,8 @@ The whole data set is our training set. We aim to predict the daily tickets from
 ```{r smooth}
 smooth.ls = smooth_ts(data = tickets,
                       vars = c("date", "ticket"),
-                      par = list(lambda = 1.5, s = 7))
+                      par = list(lambda = 1.5, s = 7),
+                      weekday.sep = TRUE)
 
 train.dat = cbind(tickets, smooth.ls$ts.dat)
 head(train.dat) 
@@ -83,7 +87,7 @@ head(train.dat)
 ## Validation
 
 We split the data set into subtraining set and validation set to find parameters.
-There are 5 parameters $\{\alpha, \beta, \gamma, \omega, \phi \}$ in the model. We use grid search to find a set of optimal parameters. The searching process has been optimized by parallel computing. 
+There are 5 parameters $\{\alpha, \beta, \gamma, \omega, \phi \}$ in the model. We use grid search to find a set of optimal parameters. The searching process has been optimized by parallel computing. We also implement cross validation.
 
 ```{r split-data}
 train.start = 20140701
@@ -106,18 +110,20 @@ select.ls = select_model(train.y = subtrain.dat$ts,
                          valid.y = valid.dat$ts,
                          grid.search = TRUE,
                          search.length = c(-0.5, 0.5), 
-                         length.out = 5)
+                         length.out = 5,
+                         CV = TRUE,
+                         kfold = 4)
 toc()
 ```
 
-The list `select.ls` contains the model which has the smallest MAPE for validation set, and the validation resutls.
+The list `select.ls` contains the model which has the smallest MAPE for validation set, and the validation results.
 
 ```{r cv}
 cv = select.ls$cv
 head(cv) 
 ```
 
-We pick the parameters which yeild the lowest MAPE. 
+We pick the parameters which yield the lowest MAPE. 
 
 ```{r mape}
 cv[which.min(cv$mape), ]
