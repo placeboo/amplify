@@ -6,6 +6,7 @@
 #' @param valid.y A numeric vector for testing. If \code{grid.search = NULL}, \code{valid.y = NULL}.
 #' @param s1 Period of the shorter seasonal period.
 #' @param s2 Period of the longer seasonal period.
+#' @param h Number of periods for forecasting.
 #' @param grid.search If TRUE, a grid search is applied.
 #' @param search.length Grid search parameter. Only used if \code{grid.search = TRUE}. It is the proportion decreasing/increasing of the first attempt parameters. For example \code{search.length = c(-0.5, 0.5)}, if the first attempt parameter is 0.1, then the searching window is from \code{0.1 * (1 - 0.5)} to \code{0.1 * (1+ 0.5)}
 #' @param length.out Grid search parameter. Only used if \code{grid.search = TRUE}. It is the desired length of search sequence.
@@ -37,6 +38,7 @@ select_model = function(train.y,
                         valid.y = NULL,
                         s1 = 7,
                         s2 = 7 * 52,
+                        h = 2* max(s1, s2),
                         grid.search = FALSE,
                         search.length = c(-0.5, 0.5),
                         length.out = 5,
@@ -44,7 +46,7 @@ select_model = function(train.y,
                         kfold = NULL) {
 
 
-    org.m = dshw(train.y, period1 = s1, period2 = s2)
+    org.m = dshw(train.y, period1 = s1, period2 = s2, h = length(valid.y))
 
     alpha0 = org.m$model$alpha
     beta0  = org.m$model$beta
@@ -111,6 +113,7 @@ select_model = function(train.y,
         model = dshw(c(train.y, valid.y),
                     period1 = s1,
                     period2 = s2,
+                    h = h,
                     alpha= opt.para$alpha,
                     beta = opt.para$beta,
                     gamma = opt.para$gamma,
@@ -123,6 +126,7 @@ select_model = function(train.y,
         model = dshw(c(train.y, valid.y),
                      period1 = s1,
                      period2 = s2,
+                     h = h,
                      alpha= alpha0,
                      beta = beta0,
                      gamma = gamma0,

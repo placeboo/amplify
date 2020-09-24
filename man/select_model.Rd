@@ -9,6 +9,7 @@ select_model(
   valid.y = NULL,
   s1 = 7,
   s2 = 7 * 52,
+  h = 2 * max(period1, period2),
   grid.search = FALSE,
   search.length = c(-0.5, 0.5),
   length.out = 5,
@@ -24,6 +25,8 @@ select_model(
 \item{s1}{Period of the shorter seasonal period.}
 
 \item{s2}{Period of the longer seasonal period.}
+
+\item{h}{Number of periods for forecasting.}
 
 \item{grid.search}{If TRUE, a grid search is applied.}
 

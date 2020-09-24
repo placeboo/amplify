@@ -30,13 +30,16 @@ dstsCV = function(train.y,
 ) {
 
     if (kfold == 1) {
-        org.m = dshw(train.y, period1 = s1, period2 = s2,
+        org.m = dshw(train.y,
+                     period1 = s1,
+                     period2 = s2,
+                     h = length(valid.y),
                      alpha= par[[1]],
                      beta = par[[2]],
                      gamma = par[[3]],
                      omega = par[[4]],
                      phi = par[[5]])
-        org.vec  = measure_dist(forecast(org.m, h=length(valid.y))$mean, valid.y)
+        org.vec  = measure_dist(forecast(org.m)$mean, valid.y)
         return(org.vec)
     }
 
@@ -51,39 +54,20 @@ dstsCV = function(train.y,
     cv_idx = c(c(1:(kfold-1)) * cv_length, valid_length) # validation ending index
     i_idx = 1 : (kfold - 1)
 
-    org.m = dshw(train.y, period1 = s1, period2 = s2,
+
+    valid1.ts = valid.y[1 : cv_idx[1]]
+
+    org.m = dshw(train.y,
+                 period1 = s1,
+                 period2 = s2,
+                 h = length(valid1.ts),
                  alpha= par[[1]],
                  beta = par[[2]],
                  gamma = par[[3]],
                  omega = par[[4]],
                  phi = par[[5]])
 
-
-    valid1.ts = valid.y[1 : cv_idx[1]]
-
     org.vec  = measure_dist(forecast(org.m, h=length(valid1.ts))$mean, valid1.ts)
-
-
-    # cv = foreach(i = i_idx, .combine = rbind, .packages = c("foreach", "forecast", "amplify")) %dopar% {
-    #
-    #     tmp =  valid.y[1 : cv_idx[i]]
-    #     cv_test = valid.y[(cv_idx[i] + 1) : cv_idx[i + 1]]
-    #
-    #     cv_train = c(train.y, tmp)
-    #
-    #     model = dshw(cv_train,
-    #                  period1 = s1,
-    #                  period2 = s2,
-    #                  alpha= par[[1]],
-    #                  beta = par[[2]],
-    #                  gamma = par[[3]],
-    #                  omega = par[[4]],
-    #                  phi = par[[5]])
-    #
-    #     pred.ls = forecast(model, h = length(cv_test))
-    #     cv_test.dist = measure_dist(pred.ls$mean, cv_test)
-    #
-    # }
 
     cv_dist.vec = c()
     for (i in i_idx) {
@@ -95,6 +79,7 @@ dstsCV = function(train.y,
         model = dshw(cv_train,
                      period1 = s1,
                      period2 = s2,
+                     h = length(cv_test),
                      alpha= par[[1]],
                      beta = par[[2]],
                      gamma = par[[3]],

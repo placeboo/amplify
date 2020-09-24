@@ -3,7 +3,7 @@ title: "Amplify Package: Double seasonal daily time series (Update 0.2.0)"
 date: "09/15/2020"
 author: Jiaqi (Jackie) Yin
 output: 
-    github_document:
+    rmarkdown::github_document:
       html_preview: true
       toc: yes
       toc_depth: 2
